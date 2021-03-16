@@ -15,11 +15,12 @@ export class HomeComponent {
     }, error => console.error(error));
   }
 
-  addFunding(amount: any, projectId:any) {
+  addFunding(amount: any, projectId: any) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
     let params = new HttpParams();
     params = params.set('amount', amount);
     params = params.set('projectId', projectId);
-    this.http.post<any>(this.baseUrl + 'fundings', params);
+    this.http.post<any>(this.baseUrl + 'fundings', params,headers);
   }
 }
 
