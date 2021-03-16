@@ -27,5 +27,12 @@ namespace EngelCrowdFunding.Controllers
             List<EngelFunding> fundings = fundingsDb.GetFundings();
             return Ok(fundings);
         }
+
+        [HttpPost]
+        public IActionResult Post([FromForm] string amount,string projectId )
+        {
+            fundingsDb.AddFunding(amount, projectId);
+            return Ok();
+        }
     }
 }

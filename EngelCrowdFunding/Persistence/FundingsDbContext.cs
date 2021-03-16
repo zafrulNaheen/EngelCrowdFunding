@@ -1,4 +1,5 @@
 ﻿using EngelCrowdFunding;
+using EngelCrowdFunding.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ namespace Funding.Persistence
     public class FundingsDbContext : DbContext
     {
         public DbSet<EngelFunding> Fundings { get; set; }
+        public DbSet<FundingAmount> Amounts { get; set; }
 
         public FundingsDbContext(DbContextOptions options) : base(options)
         {
@@ -40,7 +42,7 @@ namespace Funding.Persistence
             {
                 Id = Guid.NewGuid(),
 
-                Date = DateTime.Now.Date,
+                Date = DateTime.Now.Date.AddDays(-5),
 
                 ProjectName = "Project at Am Gemainde Park",
 
@@ -57,7 +59,7 @@ namespace Funding.Persistence
             {
                 Id = Guid.NewGuid(),
 
-                Date = DateTime.Now.Date,
+                Date = DateTime.Now.Date.AddDays(-7),
 
                 ProjectName = "Project at Volks Park",
 
@@ -74,7 +76,7 @@ namespace Funding.Persistence
             {
                 Id = Guid.NewGuid(),
 
-                Date = DateTime.Now.Date,
+                Date = DateTime.Now.Date.AddDays(-15),
 
                 ProjectName = "Project at Schillers Park",
 
@@ -92,6 +94,18 @@ namespace Funding.Persistence
         public List<EngelFunding> GetFundings()
         {
             return Fundings.Local.ToList<EngelFunding>();
+        }
+
+        public void AddFunding(string amount,string projectId)
+        {
+            Amounts.Add(new FundingAmount
+            {
+                Id= Guid.NewGuid(),
+                FundingId = new Guid(projectId),
+                Amount = Convert.ToDouble(amount)
+            });
+
+
         }
     }
 }
