@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Funding.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -12,25 +13,19 @@ namespace EngelCrowdFunding.Controllers
     public class FundingsController : ControllerBase
     {
         private readonly ILogger<FundingsController> _logger;
+        private readonly FundingsDbContext fundingsDb;
 
-        public FundingsController(ILogger<FundingsController> logger)
+        public FundingsController(ILogger<FundingsController> logger, FundingsDbContext context)
         {
             _logger = logger;
+            fundingsDb = context;
         }
 
         [HttpGet]
-        public IEnumerable<EngelFunding> Get()
+        public IActionResult Get()
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new EngelFunding
-            {
-                Date = DateTime.Now.AddDays(index),
-                ProjectName = "New Project" + DateTime.Now.AddDays(index),
-                Area = index * 9,
-                Description = "Description of " + index,
-                PurchasePrice = index * 499.5
-            }) 
-            .ToArray();
+            List<EngelFunding> fundings = fundingsDb.GetFundings();
+            return Ok(fundings);
         }
     }
 }

@@ -16,7 +16,7 @@
   </thead>
   <tbody>
       <tr *ngFor="let funding of fundings">
-          <td>{{ funding.date }}</td>
+          <td>{{ funding.date.split('T')[0] }}</td>
           <td>{{ funding.projectName }}</td>
           <td>{{ funding.area }}</td>
           <td>{{ funding.description }}</td>

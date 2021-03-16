@@ -4,6 +4,8 @@ namespace EngelCrowdFunding
 {
     public class EngelFunding
     {
+        public Guid Id { get; set; }
+
         public DateTime Date { get; set; }
 
         public string ProjectName { get; set; }
