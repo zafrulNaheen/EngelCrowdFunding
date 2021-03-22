@@ -6,6 +6,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 
 import { Funding, FundingAmount } from '../models/funding';
 import { MessageService } from './message.service';
+import { Investor } from '../models/investor';
 
 
 @Injectable({ providedIn: 'root' })
@@ -19,7 +20,7 @@ export class FundingService {
 
   constructor(
     private http: HttpClient,
-    private messageService: MessageService  ) {
+    private messageService: MessageService) {
   }
 
 
@@ -33,16 +34,24 @@ export class FundingService {
         catchError(this.handleError<Funding[]>('getFundings', []))
       );
   }
-  
+
+  getUsers(): Observable<Investor[]> {
+    return this.http.get<Investor[]>(this.serviceUrl + "/users")
+      .pipe(
+        tap(_ => this.log('fetched investors')),
+        catchError(this.handleError<Investor[]>('investors', []))
+      );
+  }
+
 
   addFunding(fundingAmount: FundingAmount): Observable<FundingAmount> {
     const body = JSON.stringify(fundingAmount);
     return this.http.post<FundingAmount>(this.serviceUrl, body, this.httpOptions).pipe(
-      tap((newFunding: FundingAmount) => this.log(`added funding w/ id=${newFunding.id}`)),
+      tap((newFunding: FundingAmount) => this.log(`added funding w/ amount=${newFunding.amount} user=${newFunding.investorId}`)),
       catchError(this.handleError<FundingAmount>('addFunding'))
     );
   }
-  
+
 
   /**
    * Handle Http operation that failed.
