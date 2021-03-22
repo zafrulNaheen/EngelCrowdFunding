@@ -4,15 +4,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
-import { Hero } from '../models/hero';
-
-import { Funding } from '../models/funding';
+import { Funding, FundingAmount } from '../models/funding';
+import { MessageService } from './message.service';
 
 
 @Injectable({ providedIn: 'root' })
-export class HeroService {
+export class FundingService {
 
-  public serviceUrl = '';
+  public serviceUrl = 'https://localhost:5001/fundings';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -20,57 +19,27 @@ export class HeroService {
 
   constructor(
     private http: HttpClient,
-    @Inject(API_BASE_URL) baseUrl?: string) {
-
-    this.serviceUrl = base;
+    private messageService: MessageService  ) {
   }
 
 
-  /** GET heroes from the server */
-  getHeroes(): Observable<Hero[]> {
-    return this.http.get<Hero[]>(this.serviceUrl)
+  /** GET fundings from the server */
+
+
+  getFundings(): Observable<Funding[]> {
+    return this.http.get<Funding[]>(this.serviceUrl)
       .pipe(
-        tap(_ => this.log('fetched heroes')),
-        catchError(this.handleError<Hero[]>('getHeroes', []))
+        tap(_ => this.log('fetched fundings')),
+        catchError(this.handleError<Funding[]>('getFundings', []))
       );
   }
+  
 
-
-   getFundings(): Observable<Funding[]> {
-    return this.http.get<Hero[]>(this.serviceUrl)
-      .pipe(
-        tap(_ => this.log('fetched heroes')),
-        catchError(this.handleError<Hero[]>('getHeroes', []))
-      );
-  }
-  /** GET hero by id. Return `undefined` when id not found */
-  getHeroNo404<Data>(id: number): Observable<Hero> {
-    const url = `${this.serviceUrl}/?id=${id}`;
-    return this.http.get<Hero[]>(url)
-      .pipe(
-        map(heroes => heroes[0]), // returns a {0|1} element array
-        tap(h => {
-          const outcome = h ? `fetched` : `did not find`;
-          this.log(`${outcome} hero id=${id}`);
-        }),
-        catchError(this.handleError<Hero>(`getHero id=${id}`))
-      );
-  }
-
-  //////// Save methods //////////
-
-  /** POST: add a new hero to the server */
-  addHero(hero: Hero): Observable<Hero> {
-    return this.http.post<Hero>(this.serviceUrl, hero, this.httpOptions).pipe(
-      tap((newHero: Hero) => this.log(`added hero w/ id=${newHero.id}`)),
-      catchError(this.handleError<Hero>('addHero'))
-    );
-  }
-
-  addFunding(funding: Funding): Observable<Hero> {
-    return this.http.post<Funding>(this.serviceUrl, funding, this.httpOptions).pipe(
-      tap((newFunding: Funding) => this.log(`added hero w/ id=${newFunding.id}`)),
-      catchError(this.handleError<Hero>('addHero'))
+  addFunding(fundingAmount: FundingAmount): Observable<FundingAmount> {
+    const body = JSON.stringify(fundingAmount);
+    return this.http.post<FundingAmount>(this.serviceUrl, body, this.httpOptions).pipe(
+      tap((newFunding: FundingAmount) => this.log(`added funding w/ id=${newFunding.id}`)),
+      catchError(this.handleError<FundingAmount>('addFunding'))
     );
   }
   
@@ -95,8 +64,8 @@ export class HeroService {
     };
   }
 
-  /** Log a HeroService message with the MessageService */
+  /** Log a Service message with the MessageService */
   private log(message: string) {
-    this.messageService.add(`HeroService: ${message}`);
+    this.messageService.add(`Service message: ${message}`);
   }
 }
