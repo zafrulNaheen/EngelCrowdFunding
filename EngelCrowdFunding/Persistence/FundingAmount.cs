@@ -7,6 +7,8 @@ namespace EngelCrowdFunding.Persistence
 
         public Guid FundingId { get; set; }
 
+        public Guid InvestorId { get; set; }
+
         public double Amount { get; set; }
 
     }

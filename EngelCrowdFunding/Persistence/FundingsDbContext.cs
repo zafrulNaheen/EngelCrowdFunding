@@ -10,10 +10,12 @@ namespace Funding.Persistence
     {
         public DbSet<EngelFunding> Fundings { get; set; }
         public DbSet<FundingAmount> Amounts { get; set; }
+        public DbSet<Investor> Users { get; set; }
 
         public FundingsDbContext(DbContextOptions options) : base(options)
         {
             FundingsList();
+            InvestorList();
         }
 
 
@@ -91,21 +93,76 @@ namespace Funding.Persistence
 
         }
 
+        public void InvestorList()
+        {
+            Investor user = new Investor()
+            {
+
+                Id = Guid.NewGuid(),
+
+                FirstName ="Microsoft"
+            };
+
+            Users.Add(user);
+
+            user = new Investor()
+            {
+
+                Id = Guid.NewGuid(),
+
+                FirstName = "Amazon"
+            };
+
+            Users.Add(user);
+
+             user = new Investor()
+            {
+
+                Id = Guid.NewGuid(),
+
+                FirstName = "Google"
+            };
+
+            Users.Add(user);
+
+
+
+        }
+
+
         public List<EngelFunding> GetFundings()
         {
             return Fundings.Local.ToList<EngelFunding>();
         }
 
-        public void AddFunding(FundingAmount fa)
+        public List<Investor> GetUsers()
         {
-            Amounts.Add(new FundingAmount
+            return Users.Local.ToList<Investor>();
+        }
+
+        public FundingAmount AddFunding(FundingAmount fa)
+        {
+            if (CheckDuplicateAmountForInvestor(fa) != null)
+                throw new Exception($" Duplicate amount {fa.Amount} found with same investor {fa.InvestorId}");
+            
+            FundingAmount funding = new FundingAmount
             {
-                Id= Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 FundingId = fa.FundingId,
-                Amount = Convert.ToDouble(fa.Amount)
-            });
+                Amount = Convert.ToDouble(fa.Amount),
+                InvestorId = fa.InvestorId
+            };
+            Amounts.Add(funding);
 
+            return funding;
+        }
 
+        private FundingAmount CheckDuplicateAmountForInvestor(FundingAmount fa)
+        {
+            return Amounts.Where(x => x.Amount == fa.Amount
+                                        && x.InvestorId == fa.InvestorId
+                                        && x.FundingId == fa.FundingId).SingleOrDefault();
+           
         }
     }
 }

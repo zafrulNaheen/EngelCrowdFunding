@@ -23,12 +23,16 @@
               <P> Price: {{ funding.purchasePrice }}</P>
           </td>
           <td>
+              <div>
+                  <label>Select User: </label>
+                  <select [(ngModel)]="selectedUserId">
+                      <option *ngFor="let user of users" [value]="user.id">{{user.firstName}}</option>
+                  </select>
+                  <label>Amount: </label>
+                  <input #amount type="number" />
+              </div>
             <div>
-                <label>Amount: </label>
-                <input #amount type="number"/>
-            </div>
-            <div>
-                <button (click)="addFunding(amount.value, funding.id);">Add</button>
+                <button (click)="addFunding(amount.value, funding.id, selectedUserId);">Add</button>
             </div>
            
               

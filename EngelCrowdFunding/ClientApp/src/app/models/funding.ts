@@ -12,4 +12,5 @@ export interface FundingAmount {
   id: string;
   fundingId: string;
   amount: number;
+  investorId:string
 }

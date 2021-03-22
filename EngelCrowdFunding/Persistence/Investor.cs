@@ -3,8 +3,9 @@ namespace EngelCrowdFunding.Persistence
 {
     public class Investor
     {
-        public Investor()
-        {
-        }
+        public Guid Id { get; set; }
+
+        public string FirstName { get; set; }
+
     }
 }

@@ -29,11 +29,28 @@ namespace EngelCrowdFunding.Controllers
             return Ok(fundings);
         }
 
+        [HttpGet("users")]
+        public IActionResult GetUsers()
+        {
+            List<Investor> fundings = fundingsDb.GetUsers();
+            return Ok(fundings);
+        }
+
         [HttpPost]
         public IActionResult Post(FundingAmount fundingAmount)
         {
-            fundingsDb.AddFunding(fundingAmount);
-            return Ok();
+            try
+            {
+
+                FundingAmount fa = fundingsDb.AddFunding(fundingAmount);
+                fundingsDb.SaveChanges();
+                return Ok(fa);
+            }
+            catch (Exception e)
+            {
+
+                return Conflict(e.Message);
+            }
         }
     }
 }
