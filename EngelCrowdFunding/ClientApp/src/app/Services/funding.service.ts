@@ -33,29 +33,7 @@ export class FundingService {
         catchError(this.handleError<Funding[]>('getFundings', []))
       );
   }
-  ///** GET hero by id. Return `undefined` when id not found */
-  //getHeroNo404<Data>(id: number): Observable<Hero> {
-  //  const url = `${this.serviceUrl}/?id=${id}`;
-  //  return this.http.get<Hero[]>(url)
-  //    .pipe(
-  //      map(heroes => heroes[0]), // returns a {0|1} element array
-  //      tap(h => {
-  //        const outcome = h ? `fetched` : `did not find`;
-  //        this.log(`${outcome} hero id=${id}`);
-  //      }),
-  //      catchError(this.handleError<Hero>(`getHero id=${id}`))
-  //    );
-  //}
-
-  //////// Save methods //////////
-
-  /** POST: add a new hero to the server */
-  //addHero(hero: Hero): Observable<Hero> {
-  //  return this.http.post<Hero>(this.serviceUrl, hero, this.httpOptions).pipe(
-  //    tap((newHero: Hero) => this.log(`added hero w/ id=${newHero.id}`)),
-  //    catchError(this.handleError<Hero>('addHero'))
-  //  );
-  //}
+  
 
   addFunding(fundingAmount: FundingAmount): Observable<FundingAmount> {
     const body = JSON.stringify(fundingAmount);
