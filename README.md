@@ -19,3 +19,7 @@ A stakeholder has an idea of creating a small crowd lending platform. You as an 
 - 	Can see a list of fundings with investment required;
 - 	Can click on a funding and submit an amount (between 100€ and 10.000€) for a funding;
 - 	Can only submit an amount once per funding.
+
+# Todo
+- Ivalidator interface with dynamic adding of validation
+- Angular Reactive forms for form validation
