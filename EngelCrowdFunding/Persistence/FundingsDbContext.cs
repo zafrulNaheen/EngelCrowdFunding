@@ -96,13 +96,13 @@ namespace Funding.Persistence
             return Fundings.Local.ToList<EngelFunding>();
         }
 
-        public void AddFunding(string amount,string projectId)
+        public void AddFunding(FundingAmount fa)
         {
             Amounts.Add(new FundingAmount
             {
                 Id= Guid.NewGuid(),
-                FundingId = new Guid(projectId),
-                Amount = Convert.ToDouble(amount)
+                FundingId = fa.FundingId,
+                Amount = Convert.ToDouble(fa.Amount)
             });
 
 

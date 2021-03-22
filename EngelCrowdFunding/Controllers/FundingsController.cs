@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EngelCrowdFunding.Persistence;
 using Funding.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -29,9 +30,9 @@ namespace EngelCrowdFunding.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromForm] string amount,string projectId )
+        public IActionResult Post(FundingAmount fundingAmount)
         {
-            fundingsDb.AddFunding(amount, projectId);
+            fundingsDb.AddFunding(fundingAmount);
             return Ok();
         }
     }

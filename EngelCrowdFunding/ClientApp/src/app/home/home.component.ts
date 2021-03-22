@@ -1,34 +1,30 @@
 import { Component, Inject } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { Funding, FundingAmount } from '../models/funding';
+import { FundingService } from '../services/funding.service';
 
 @Component({
   selector: 'home',
   templateUrl: './home.component.html'
 })
 export class HomeComponent {
-  public fundings: Funding[];
+
+  fundings: Funding[];
   amount: number;
+  fundingAmount: FundingAmount[];
 
-  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) {
-    this.http.get<Funding[]>(this.baseUrl + 'fundings').subscribe(result => {
-      this.fundings = result;
-    }, error => console.error(error));
+
+  constructor(private http: HttpClient,private fundingService: FundingService) {
+
+    this.fundingService.getFundings().subscribe(fundings => this.fundings = fundings);
+    
   }
 
-  addFunding(amount: any, projectId: any) {
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-    let params = new HttpParams();
-    params = params.set('amount', amount);
-    params = params.set('projectId', projectId);
-    this.http.post<any>(this.baseUrl + 'fundings', params,headers);
+  addFunding(amount: number, fundingId: string) {
+    if (!amount) { return; }
+    this.fundingService.addFunding({ amount: Number(amount), fundingId:fundingId } as FundingAmount)
+      .subscribe(fa => {
+        this.fundingAmount.push(fa);
+      });
   }
-}
-
-interface Funding {
-  id:string
-  date: string;
-  projectName: string;
-  area: number;
-  description: string;
-  purchasePrice:number
 }

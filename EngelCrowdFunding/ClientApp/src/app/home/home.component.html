@@ -25,11 +25,12 @@
           <td>
             <div>
                 <label>Amount: </label>
-                <input #amount/>
+                <input #amount type="number"/>
             </div>
             <div>
-                <button (click)="addFunding(amount.value, funding.id)">Add</button>
+                <button (click)="addFunding(amount.value, funding.id);">Add</button>
             </div>
+           
               
           </td>
       </tr>
